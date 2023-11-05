@@ -56,9 +56,9 @@ const inputTransferAmount = document.querySelector('.form__input--amount');
 const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
-
+//let's first make the container of all movements row empty
 containerMovements.innerHTML = '';
-
+// a function that will display all movements rows in the browser
  function displayMovements (movements){
   movements.forEach(function (mov, i){
     const type = mov >0 ? 'deposit':'withdrawal';
@@ -72,5 +72,15 @@ containerMovements.innerHTML = '';
 };
 displayMovements(account1.movements);
 
+//let's compute the usernames
+function createUserName (accounts){
+  accounts.forEach(function(acc){
+    
+acc.userName = acc.owner.toLowerCase().split(' ').map( name => name[0])
+.join('');
+console.log(userName);
+  })
+}
 
+createUserName(accounts);
 
