@@ -78,9 +78,24 @@ function createUserName (accounts){
     
 acc.userName = acc.owner.toLowerCase().split(' ').map( name => name[0])
 .join('');
-console.log(userName);
   })
 }
 
 createUserName(accounts);
 
+const CalcDisplayBalance = function (movements) {
+
+ const balance = movements.reduce((acc, mov)=>  acc + mov, 0);
+labelBalance.innerHTML = `${balance} Eur`;
+};
+CalcDisplayBalance(account1.movements);
+btnLogin.addEventListener('click', function (){
+  containerApp.style.opacity = 100;
+const currentAccount = accounts.find (function (acc){
+acc.userName === inputLoginUsername.value; 
+});
+if (currentAccount.pin === inputLoginPin.value){
+  const firstName = currentAccount.owner.split(' ')[0];
+  labelWelcome.textContent = `Welcome back , ${firstName}`;
+};
+});
