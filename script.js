@@ -59,6 +59,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 //let's first make the container of all movements row empty
 containerMovements.innerHTML = '';
 // a function that will display all movements rows in the browser
+
  function displayMovements (movements){
   movements.forEach(function (mov, i){
     const type = mov >0 ? 'deposit':'withdrawal';
@@ -70,7 +71,6 @@ containerMovements.innerHTML = '';
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 };
-displayMovements(account1.movements);
 
 //let's compute the usernames
 function createUserName (accounts){
@@ -81,16 +81,15 @@ acc.userName = acc.owner.toLowerCase().split(' ').map( name => name[0])
   })
 }
 
-createUserName(accounts);
-
-
 const CalcDisplayBalance = function (movements) {
 
  const balance = movements.reduce((acc, mov)=>  acc + mov, 0);
-labelBalance.innerHTML = `${balance} Eur`;
+labelBalance.innerHTML = `${balance}€`;
 };
-CalcDisplayBalance(account1.movements);
 let currentAccount;
+
+//By clicking the logIn button
+
 btnLogin.addEventListener('click', function (e){
 e.preventDefault();
   
@@ -100,7 +99,14 @@ return acc.userName === inputLoginUsername.value;
 
 if (currentAccount.pin == inputLoginPin.value){
   const firstName = currentAccount.owner.split(' ')[0];
-  console.log(firstName);
-  labelWelcome.textContent = `Welcome back , ${firstName}`;
-};containerApp.style.opacity = 100;
+  labelWelcome.textContent = `Welcome back , ${firstName}!`;
+  containerApp.style.opacity = 100;
+//create simplified usernames
+createUserName(accounts);
+//display all the movements
+displayMovements(currentAccount.movements);
+//calculate and display the total balance
+CalcDisplayBalance(currentAccount.movements);
+};
+
 });
