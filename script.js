@@ -80,7 +80,8 @@ acc.userName = acc.owner.toLowerCase().split(' ').map( name => name[0])
 .join('');
   })
 }
-
+//create a simplified username
+createUserName(accounts);
 const CalcDisplayBalance = function (movements) {
 
  const balance = movements.reduce((acc, mov)=>  acc + mov, 0);
@@ -102,7 +103,7 @@ if (currentAccount.pin == inputLoginPin.value){
   labelWelcome.textContent = `Welcome back , ${firstName}!`;
   containerApp.style.opacity = 100;
 //create simplified usernames
-createUserName(accounts);
+
 //display all the movements
 displayMovements(currentAccount.movements);
 //calculate and display the total balance
