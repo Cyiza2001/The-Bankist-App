@@ -83,19 +83,24 @@ acc.userName = acc.owner.toLowerCase().split(' ').map( name => name[0])
 
 createUserName(accounts);
 
+
 const CalcDisplayBalance = function (movements) {
 
  const balance = movements.reduce((acc, mov)=>  acc + mov, 0);
 labelBalance.innerHTML = `${balance} Eur`;
 };
 CalcDisplayBalance(account1.movements);
-btnLogin.addEventListener('click', function (){
-  containerApp.style.opacity = 100;
-const currentAccount = accounts.find (function (acc){
-acc.userName === inputLoginUsername.value; 
+let currentAccount;
+btnLogin.addEventListener('click', function (e){
+e.preventDefault();
+  
+ currentAccount = accounts.find (function (acc){
+return acc.userName === inputLoginUsername.value; 
 });
-if (currentAccount.pin === inputLoginPin.value){
+
+if (currentAccount.pin == inputLoginPin.value){
   const firstName = currentAccount.owner.split(' ')[0];
+  console.log(firstName);
   labelWelcome.textContent = `Welcome back , ${firstName}`;
-};
+};containerApp.style.opacity = 100;
 });
