@@ -66,7 +66,7 @@ containerMovements.innerHTML = '';
     const html = ` <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
     <div class="movements__date">3 days ago</div>
-    <div class="movements__value">${mov} </div>
+    <div class="movements__value">${mov}€ </div>
     </div>`;
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
@@ -86,7 +86,16 @@ const CalcDisplayBalance = function (movements) {
 
  const balance = movements.reduce((acc, mov)=>  acc + mov, 0);
 labelBalance.innerHTML = `${balance}€`;
+const interest = balance* currentAccount.interestRate;
+labelSumInterest.textContent = `${interest}€`;
 };
+//calculate and display the summary of incomes and outs as well as the intrests
+function CalcDisplaySummary (movements){
+const incomes = movements.filter(mov => mov > 0).reduce( (acc , mov) => acc + mov , 0);
+labelSumIn.textContent = `${incomes}€`;
+const outs = movements.filter(mov => mov < 0).reduce( (acc , mov) => acc + mov , 0);
+labelSumOut.textContent = `${Math.abs(outs)}€`;
+}
 let currentAccount;
 
 //By clicking the logIn button
@@ -102,12 +111,12 @@ if (currentAccount.pin == inputLoginPin.value){
   const firstName = currentAccount.owner.split(' ')[0];
   labelWelcome.textContent = `Welcome back , ${firstName}!`;
   containerApp.style.opacity = 100;
-//create simplified usernames
-
 //display all the movements
 displayMovements(currentAccount.movements);
 //calculate and display the total balance
 CalcDisplayBalance(currentAccount.movements);
+// calc and display summaries 
+CalcDisplaySummary (currentAccount.movements);
 };
 
 });
