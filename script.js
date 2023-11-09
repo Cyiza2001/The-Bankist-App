@@ -30,7 +30,6 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
-/////////////////////////////////////////////////
 // Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
@@ -82,10 +81,10 @@ acc.userName = acc.owner.toLowerCase().split(' ').map( name => name[0])
 }
 //create a simplified username
 createUserName(accounts);
-const CalcDisplayBalance = function (movements) {
+const CalcDisplayBalance = function (acc) {
 
- const balance = movements.reduce((acc, mov)=>  acc + mov, 0);
-labelBalance.innerHTML = `${balance}€`;
+acc.balance = acc.movements.reduce((acc, mov)=>  acc + mov, 0);
+labelBalance.innerHTML = `${acc.balance}€`;
 
 };
 //calculate and display the summary of incomes and outs as well as the intrests
@@ -112,12 +111,28 @@ if (currentAccount.pin == inputLoginPin.value){
   const firstName = currentAccount.owner.split(' ')[0];
   labelWelcome.textContent = `Welcome back , ${firstName}!`;
   containerApp.style.opacity = 100;
+  //clear input fields
+  inputLoginUsername.value = inputLoginPin.value = ' ';
+  inputLoginPin.blur();
 //display all the movements
 displayMovements(currentAccount.movements);
 //calculate and display the total balance
-CalcDisplayBalance(currentAccount.movements);
+CalcDisplayBalance(currentAccount);
 // calc and display summaries 
 CalcDisplaySummary (currentAccount.movements);
 };
 
 });
+
+// by clicking the transfer button
+btnTransfer.addEventListener('click', function(e){
+  e.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+  const receiveAcc = accounts.find( acc => acc.username === inputTransferTo.value);
+  console.log(accounts);
+if(amount > 0 && currentAccount.balance >= amount &&  receiveAcc !== currentAccount.userName){
+  receiveAcc.movements.push(amount);
+  currentAccount.movements.push(-amount);
+}
+} );
