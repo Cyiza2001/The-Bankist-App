@@ -86,8 +86,7 @@ const CalcDisplayBalance = function (movements) {
 
  const balance = movements.reduce((acc, mov)=>  acc + mov, 0);
 labelBalance.innerHTML = `${balance}€`;
-const interest = balance* currentAccount.interestRate;
-labelSumInterest.textContent = `${interest}€`;
+
 };
 //calculate and display the summary of incomes and outs as well as the intrests
 function CalcDisplaySummary (movements){
@@ -95,6 +94,8 @@ const incomes = movements.filter(mov => mov > 0).reduce( (acc , mov) => acc + mo
 labelSumIn.textContent = `${incomes}€`;
 const outs = movements.filter(mov => mov < 0).reduce( (acc , mov) => acc + mov , 0);
 labelSumOut.textContent = `${Math.abs(outs)}€`;
+const interest = movements.filter( mov => mov > 0).map(deposit => deposit * currentAccount.interestRate/100).reduce((acc , mov)=> acc + mov , 0);
+labelSumInterest.textContent = `${interest}€`;
 }
 let currentAccount;
 
