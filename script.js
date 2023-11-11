@@ -86,9 +86,10 @@ displayMovements(acc.movements);
 //calculate and display the total balance
 CalcDisplayBalance(acc);
 // calc and display summaries 
-CalcDisplaySummary (acc.movements);}
+CalcDisplaySummary (acc.movements);};
 //create a simplified username
 createUserName(accounts);
+//calc and display the balance
 const CalcDisplayBalance = function (acc) {
 
 acc.balance = acc.movements.reduce((acc, mov)=>  acc + mov, 0);
@@ -133,11 +134,11 @@ btnTransfer.addEventListener('click', function(e){
 
   const amount = Number(inputTransferAmount.value);
   const receiveAcc = accounts.find( acc => acc.userName === inputTransferTo.value);
+  inputTransferAmount.value = inputTransferTo.value = ' ';
 
 if(amount > 0 && currentAccount.balance >= amount &&  receiveAcc.userName !== currentAccount.userName){
   receiveAcc.movements.push(amount);
   currentAccount.movements.push(-amount);
-  updateUi(currentAccount);
-  console.log(currentAccount.movements);
+  updateUi(currentAccount); 
 }
 } );
