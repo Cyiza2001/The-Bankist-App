@@ -59,8 +59,9 @@ const inputClosePin = document.querySelector('.form__input--pin');
 containerMovements.innerHTML = '';
 // a function that will display all movements rows in the browser
 
- function displayMovements (movements){
-  movements.forEach(function (mov, i){
+ function displayMovements (movements, sort = false){
+  const movs = sort ? movements.slice().sort((a,b)=> a - b) : movements;
+  movs.forEach(function (mov, i){
     const type = mov >0 ? 'deposit':'withdrawal';
     const html = ` <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
@@ -171,3 +172,10 @@ containerApp.style.opacity = 0 ;
 inputClosePin.blur();
 });
 
+// By clicking the sort button
+let sorted = false;
+btnSort.addEventListener('click',function(e){
+  e.preventDefault();
+  displayMovements(currentAccount.movements ,!sorted);
+  sorted = !sorted;
+});
