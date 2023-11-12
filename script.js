@@ -87,6 +87,7 @@ displayMovements(acc.movements);
 CalcDisplayBalance(acc);
 // calc and display summaries 
 CalcDisplaySummary (acc.movements);};
+
 //create a simplified username
 createUserName(accounts);
 //calc and display the balance
@@ -116,7 +117,7 @@ e.preventDefault();
 return acc.userName === inputLoginUsername.value; 
 });
 
-if (currentAccount.pin == inputLoginPin.value){
+if (currentAccount?.pin == inputLoginPin.value){
   const firstName = currentAccount.owner.split(' ')[0];
   labelWelcome.textContent = `Welcome back , ${firstName}!`;
   containerApp.style.opacity = 100;
@@ -128,6 +129,7 @@ updateUi (currentAccount);
 
 });
 
+
 // by clicking the transfer button
 btnTransfer.addEventListener('click', function(e){
   e.preventDefault();
@@ -136,9 +138,36 @@ btnTransfer.addEventListener('click', function(e){
   const receiveAcc = accounts.find( acc => acc.userName === inputTransferTo.value);
   inputTransferAmount.value = inputTransferTo.value = ' ';
 
-if(amount > 0 && currentAccount.balance >= amount &&  receiveAcc.userName !== currentAccount.userName){
+if(amount > 0 && currentAccount?.balance >= amount &&  receiveAcc.userName !== currentAccount.userName){
   receiveAcc.movements.push(amount);
   currentAccount.movements.push(-amount);
   updateUi(currentAccount); 
 }
 } );
+//By clicking the request loan button
+btnLoan.addEventListener('click', function(e){
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if(amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)){
+    currentAccount.movements.push(amount);
+    //clear the input field
+    inputLoanAmount.value = ' ';
+    //update Ui
+    updateUi(currentAccount);
+  };
+});
+//By clicking the close account button
+btnClose.addEventListener('click', function(e){
+  e.preventDefault();
+  if (currentAccount.userName === inputCloseUsername.value && currentAccount.pin == inputClosePin.value ){
+const index = accounts.findIndex(acc => acc.userName === currentAccount.userName);
+accounts.splice(index , 1);
+// hide the Ui
+containerApp.style.opacity = 0 ;
+
+  };
+  //clear the input fields
+  inputCloseUsername.value = inputClosePin.value = ' ';
+inputClosePin.blur();
+});
+
