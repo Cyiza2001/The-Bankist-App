@@ -1,0 +1,1 @@
+# The-Bankist-App   this is an application that works as a simple bank where the user needs to first login into the account by entering the registered username and pin , after loging in the user interface is updated so that one is allowed to transfer some amount of money to his friend , he/she can also request some loan from the bank and even close the account.
