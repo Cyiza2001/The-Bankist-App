@@ -13,7 +13,7 @@ const account1 = {
     "2020-05-08T14:11:59.604Z",
     "2020-07-26T17:01:17.194Z",
     "2020-07-28T23:36:17.929Z",
-    "2020-08-01T10:51:36.790Z",
+    "2023-11-22T10:51:36.790Z",
   ],
 };
 
@@ -107,11 +107,8 @@ containerMovements.innerHTML = '';
   
   movs.forEach(function (mov, i){
     const type = mov >0 ? 'deposit':'withdrawal';
-  const date = new Date (acc.movementsDates[i]);
-  const month = `${date.getMonth() + 1}`.padStart(2, 0) ;
-const year = date.getFullYear();
-const mydate = `${date.getDate()}`.padStart(2 , 0);
-const displayDate = `${mydate}/ ${month}/ ${year}`;
+    const date = new Date (acc.movementsDates[i]);
+    const displayDate = formatMovementsDates(date)
     const html = ` <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
     <div class="movements__date">${displayDate}</div>
@@ -158,7 +155,25 @@ const interest = movements.filter( mov => mov > 0).map(deposit => deposit * curr
 labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
-//label dates
+//formatting the movement dates
+function formatMovementsDates(date){
+  const calcDaysPassed = (date1 , date2) => Math.abs(date1 - date2)/(1000*60*60*24);
+  const daysPassed  = calcDaysPassed(new Date(), date);
+  if( daysPassed === 0) return "Today";
+  if( daysPassed === 1) return "Yesterday";
+  if( daysPassed <= 7) return `${daysPassed} Days Ago`;
+else{
+
+  const month = `${date.getMonth() + 1}`.padStart(2, 0) ;
+const year = date.getFullYear();
+const mydate = `${date.getDate()}`.padStart(2 , 0);
+return `${mydate}/ ${month}/ ${year}`;
+
+}
+
+
+}
+
 let currentAccount;
 //By clicking the logIn button
 
