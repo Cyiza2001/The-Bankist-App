@@ -186,9 +186,29 @@ return  new Intl.DateTimeFormat(locale).format(date);
  function  formattedMov (value , locale , currency){
   return new Intl.NumberFormat(locale, {style : 'currency',
   currency : currency, }).format(value);
- }
+ };
+ //implementing the timer
+ const setLogoutTime = function (){
+  const tick = function (){
+    const minute = String(Math.trunc(time/60)).padStart(2,0);
+    const seconds = String(time%60).padStart(2,0);
+    labelTimer.textContent = `${minute}:${seconds}`;
 
-let currentAccount;
+    if (time === 0){
+      clearInterval(timer);
+      containerApp.style.opacity = 0;
+      labelWelcome.textContent = `Log in to Get Started`;
+    }
+    time--;
+  };
+let time = 10;
+  tick();
+  const timer = setInterval(tick,1000);
+  return timer;
+
+ };
+
+let currentAccount, timer;
 //By clicking the logIn button
 
 btnLogin.addEventListener('click', function (e){
@@ -206,6 +226,8 @@ if (currentAccount?.pin == inputLoginPin.value){
   inputLoginUsername.value = inputLoginPin.value = ' ';
   inputLoginPin.blur();
 updateUi (currentAccount);
+if(timer) clearInterval(timer);
+timer =setLogoutTime();
 const now = new Date ();
 const month = `${now.getMonth() + 1}`.padStart(2, 0) ;
 const year = now.getFullYear();
@@ -240,6 +262,9 @@ if(amount > 0 && currentAccount?.balance >= amount &&  receiveAcc.userName !== c
   currentAccount.movementsDates.push(new Date().toISOString());
     receiveAcc.movementsDates.push(new Date().toISOString());
   updateUi(currentAccount); 
+  //reset timer
+  clearInterval(timer);
+timer =setLogoutTime();
 };
 } );
 //By clicking the request loan button
@@ -257,6 +282,9 @@ btnLoan.addEventListener('click', function(e){
     inputLoanAmount.value = ' ';
     //update Ui
     updateUi(currentAccount);
+    //reset timer
+    clearInterval(timer);
+timer =setLogoutTime();
   };
 });
 //By clicking the close account button
