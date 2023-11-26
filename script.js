@@ -115,12 +115,13 @@ containerMovements.innerHTML = '';
   
   movs.forEach(function (mov, i){
     const type = mov >0 ? 'deposit':'withdrawal';
+    const formatcur = formattedMov(mov , acc.locale , acc.currency );
     const date = new Date (acc.movementsDates[i]);
     const displayDate = formatMovementsDates(date , acc.locale);
     const html = ` <div class="movements__row">
     <div class="movements__type movements__type--${type}">${i+1} ${type}</div>
     <div class="movements__date">${displayDate}</div>
-    <div class="movements__value">${mov.toFixed(2)}€ </div>
+    <div class="movements__value">${formatcur} </div>
     </div>`;
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
@@ -141,26 +142,27 @@ displayMovements(acc);
 //calculate and display the total balance
 CalcDisplayBalance(acc);
 // calc and display summaries 
-CalcDisplaySummary (acc.movements);
+CalcDisplaySummary (acc);
 };
 
 //create a simplified username
 createUserName(accounts);
 //calc and display the balance
 const CalcDisplayBalance = function (acc) {
-
+  
 acc.balance = acc.movements.reduce((acc, mov)=>  acc + mov, 0);
-labelBalance.innerHTML = `${acc.balance.toFixed(2)}€`;
+const formatcur = formattedMov(acc.balance , acc.locale , acc.currency );
+labelBalance.innerHTML = `${formatcur}`;
 
 };
 //calculate and display the summary of incomes and outs as well as the intrests
-function CalcDisplaySummary (movements){
-const incomes = movements.filter(mov => mov > 0).reduce( (acc , mov) => acc + mov , 0);
-labelSumIn.textContent = `${incomes.toFixed(2)}€`;
-const outs = movements.filter(mov => mov < 0).reduce( (acc , mov) => acc + mov , 0);
-labelSumOut.textContent = `${Math.abs(outs).toFixed(2)}€`;
-const interest = movements.filter( mov => mov > 0).map(deposit => deposit * currentAccount.interestRate/100).reduce((acc , mov)=> acc + mov , 0);
-labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+function CalcDisplaySummary (acc){
+const incomes = acc.movements.filter(mov => mov > 0).reduce( (acc , mov) => acc + mov , 0);
+labelSumIn.textContent = formattedMov(incomes , acc.locale , acc.currency );
+const outs = acc.movements.filter(mov => mov < 0).reduce( (acc , mov) => acc + mov , 0);
+labelSumOut.textContent = formattedMov(Math.abs(outs) , acc.locale , acc.currency );
+const interest = acc.movements.filter( mov => mov > 0).map(deposit => deposit * currentAccount.interestRate/100).reduce((acc , mov)=> acc + mov , 0);
+labelSumInterest.textContent = formattedMov(interest , acc.locale , acc.currency );
 };
 
 //formatting the movement dates
@@ -168,8 +170,6 @@ function formatMovementsDates(date, locale){
   const calcDaysPassed = (date1 , date2) => Math.abs(date1 - date2)/(1000*60*60*24);
   const daysPassed  = Math.round(calcDaysPassed(new Date(), date));
  
-
-console.log(daysPassed);
   if( daysPassed === 0) return "Today";
   if( daysPassed === 1) return "Yesterday";
   if( daysPassed <= 7) return `${daysPassed} Days Ago`;
@@ -181,7 +181,12 @@ return  new Intl.DateTimeFormat(locale).format(date);
 }
 
 
-}
+};
+ //formatting mov function
+ function  formattedMov (value , locale , currency){
+  return new Intl.NumberFormat(locale, {style : 'currency',
+  currency : currency, }).format(value);
+ }
 
 let currentAccount;
 //By clicking the logIn button
